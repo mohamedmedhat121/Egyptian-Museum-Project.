@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المعروضات الأثرية - المتحف المصري الكبير</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ------------------------------------- */
+        /* CSS: التنسيق والتصميم العام */
+        /* ------------------------------------- */
+        :root {
+            --color-dark: #0A0A0A;
+            --color-gold: #FFD700;
+            --color-light: #F5F5F5;
+            --color-accent: #8B4513;
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Cairo', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); background-color: var(--color-dark); color: var(--color-light); line-height: 1.6; }
+        h1, h2, h3 { font-family: var(--font-serif); color: var(--color-gold); text-align: center; margin-bottom: 20px; }
+        a { text-decoration: none; color: var(--color-light); transition: color 0.3s; }
+        a:hover { color: var(--color-gold); }
+
+        /* شريط التنقل */
+        header {
+            background-color: rgba(10, 10, 10, 0.9);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky; 
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--color-gold); }
+        nav a { margin-right: 30px; font-size: 1rem; padding: 5px 0; position: relative; }
+        nav a::after { content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 2px; background-color: var(--color-gold); transition: width 0.3s ease-out; }
+        nav a:hover::after { width: 100%; left: 0; right: auto; }
+        
+        /* أقسام المحتوى العامة */
+        section { padding: 80px 50px; max-width: 1200px; margin: 0 auto; }
+        .section-title { font-size: 2.5rem; margin-bottom: 50px; position: relative; padding-bottom: 10px; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; right: 50%; transform: translateX(50%); width: 80px; height: 3px; background-color: var(--color-gold); }
+        
+        .tour-hero {
+            padding-top: 150px;
+            text-align: center;
+        }
+        .tour-hero h1 { font-size: 3.5rem; }
+
+        /* ------------------------------------- */
+        /* قسم المعروضات (Exhibits Grid) */
+        /* ------------------------------------- */
+        .exhibits-grid {
+            display: grid;
+            grid-template-columns:1fr;
+            gap: 50px; 
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .statue-card {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: box-shadow 0.3s ease-in-out;
+            border: 1px solid var(--color-accent);
+            position: relative; /* مهم جدًا لوضع النص فوق الصورة */
+            height: 450px; /* ارتفاع ثابت للبطاقة */
+        }
+        
+        /* تنسيق الصورة لتغطي البطاقة بالكامل */
+        .statue-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            filter: grayscale(80%); 
+            transition: all 0.6s ease-in-out;
+            position: absolute; 
+            top: 0;
+            left: 0;
+        }
+        
+        /* تنسيق تفاصيل الشرح (النص) */
+        .statue-details {
+            position: absolute; 
+            top: 0;
+            right: -100%; /* يبدأ مخفيًا تمامًا على اليمين */
+            width: 50%; /* يأخذ نصف عرض البطاقة عند الظهور */
+            height: 100%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.85); /* خلفية داكنة قوية للنص */
+            color: var(--color-light);
+            text-align: right;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end; 
+            transition: all 0.6s ease-in-out; 
+            z-index: 10; 
+            opacity: 0; /* يكون مخفيًا في البداية */
+        }
+        
+        .statue-details h3 {
+             color: var(--color-gold);
+             text-align: right;
+             margin-bottom: 10px;
+             font-size: 1.8rem;
+        }
+        .statue-details p {
+            font-size: 1rem;
+            max-width: 90%; 
+        }
+
+        /* ------------------------------------- */
+        /* تأثير الحركة عند التمرير (Hover Effect) */
+        /* ------------------------------------- */
+        .statue-card:hover img {
+            /* تحريك الصورة للشمال */
+            transform: translateX(-50%); 
+            filter: grayscale(0%); /* تلوين الصورة */
+        }
+
+        .statue-card:hover .statue-details {
+            right: 0; /* يظهر النص بالكامل من اليمين */
+            opacity: 1; /* يصبح مرئيًا */
+        }
+        
+        /* تذييل الصفحة (Footer) */
+        footer {
+            background-color: #000000;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9rem;
+            border-top: 2px solid var(--color-accent);
+        }
+        .social-links a { margin: 0 15px; font-size: 1.2rem; color: var(--color-gold); }
+
+        /* CSS Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <header>
+        <div class="logo">المتحف المصري الكبير (GEM)</div>
+        <nav>
+            <a href="index.html">الرئيسية</a>
+            <a href="index.html#about">عن المتحف</a>
+            <a href="#">الجولة الافتراضية</a>
+        </nav>
+    </header>
+
+    <div class="tour-hero">
+        <h1>معرض كنوز ملوك مصر</h1>
+        <p style="color: #ccc; margin-bottom: 40px;">استكشف أبرز القطع التي ستبهر العالم.</p>
+    </div>
+
+    <section id="exhibits">
+        <h2 class="section-title">👑 كنوز أثرية مختارة</h2>
+        <div class="exhibits-grid">
+
+            <div class="statue-card">
+                <img src="images/68fa76044236041b1b6032cf.png" alt="قناع توت عنخ آمون الذهبي">
+                <div class="statue-details">
+                    <h3>قناع توت عنخ آمون الذهبي</h3>
+                    <p>أيقونة الفن المصري القديم. قناع جنائزي مصنوع من الذهب الخالص والأحجار شبه الكريمة، وهو دليل على براعة الحرفيين في عصر الدولة الحديثة.</p>
+                </div>
+            </div>
+
+            <div class="statue-card">
+                <img src="images/5234145.png"alt="تمثال رمسيس الثاني">
+                <div class="statue-details">
+                    <h3>تمثال الملك رمسيس الثاني</h3>
+                    <p>التمثال الضخم للملك المحارب. يزن حوالي 83 طنًا ويستقبل زوار المتحف، ليرمز إلى القوة والعظمة التي حكمت مصر لقرابة 67 عامًا.</p>
+                </div>
+            </div>
+
+            <div class="statue-card">
+                <img src="images/123455432.png" alt="تمثال الكاتب الجالس">
+                <div class="statue-details">
+                    <h3>تمثال الكاتب الجالس</h3>
+                    <p>أحد أشهر التماثيل الواقعية في مصر. يعرض ملامح دقيقة وحيوية للكاتب، ويعكس دور الموظفين والكتاب في الإدارة المصرية القديمة.</p>
+                </div>
+            </div>
+            
+             <div class="statue-card">
+                <img src="images/2342343422.png" alt="تمثال الكاهن كا ـ إبر">
+                <div class="statue-details">
+                    <h3>تمثال الكاهن كا ـ إبر (شيخ البلد)</h3>
+                    <p>المعروف باسم "شيخ البلد"، يتميز بالواقعية الفائقة في النحت الخشبي ليوضح تفاصيل الشخصيات غير الملكية في مصر القديمة.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 المتحف المصري الكبير (GEM). جميع الحقوق محفوظة.</p>
+        <p>الموقع: الجيزة، مصر.</p>
+        <div class="social-links">
+            <a href="#">فيسبوك</a> | 
+            <a href="#">إنستجرام</a> | 
+            <a href="#">تويتر</a>
+        </div>
+    </footer>
+
+</body>
+</html>
